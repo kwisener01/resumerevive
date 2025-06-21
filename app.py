@@ -1,5 +1,5 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 import docx2txt
 import PyPDF2
 import tempfile
@@ -7,7 +7,7 @@ from docx import Document
 from datetime import datetime
 
 # --- CONFIG ---
-openai.api_key = st.secrets["OPENAI_API_KEY"]  # Put your OpenAI API key in Streamlit secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])  # Put your OpenAI API key in Streamlit secrets
 
 # --- FUNCTIONS ---
 def extract_text_from_pdf(uploaded_file):
@@ -35,7 +35,7 @@ Original Resume:
 {resume_text}
     """
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
